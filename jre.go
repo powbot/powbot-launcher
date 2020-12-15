@@ -23,9 +23,9 @@ func GetBinaryName() string {
 	if runtime.GOOS == "windows" {
 		return "javaw.exe"
 	} else if runtime.GOOS == "linux" {
-		return "javaw"
+		return "java"
 	} else {
-		return "javaw"
+		return "java"
 	}
 }
 
@@ -73,28 +73,28 @@ func FindJava(powbotDirectory string) (string, error) {
 func ObtainJRE(powbotDirectory string) (string, error) {
 	jreDirectory := filepath.FromSlash(powbotDirectory + "/jre/")
 	if err := CreateDirectory(jreDirectory); err != nil {
-		tm.Println(tm.Color("\tCouldn't create directory for JRE at " + jreDirectory, tm.RED))
+		tm.Println(tm.Color("\tCouldn't create directory for JRE at "+jreDirectory, tm.RED))
 		tm.Flush()
 		return "", err
 	}
 
 	jrePackage, err := DownloadJRE(jreDirectory)
 	if err != nil {
-		tm.Println(tm.Color("\tCouldn't download JRE to " + jreDirectory, tm.RED))
+		tm.Println(tm.Color("\tCouldn't download JRE to "+jreDirectory, tm.RED))
 		tm.Flush()
 		return "", err
 	}
 
 	err = UnpackJRE(jrePackage)
 	if err != nil {
-		tm.Println(tm.Color("\tCouldn't unpack JRE to " + jreDirectory, tm.RED))
+		tm.Println(tm.Color("\tCouldn't unpack JRE to "+jreDirectory, tm.RED))
 		tm.Flush()
 		return "", err
 	}
 
 	java, err := FindJava(powbotDirectory)
 	if err != nil {
-		tm.Println(tm.Color("\tCouldn't find the unpacked Java executable in " + jreDirectory, tm.RED))
+		tm.Println(tm.Color("\tCouldn't find the unpacked Java executable in "+jreDirectory, tm.RED))
 		tm.Flush()
 		return "", err
 	}
