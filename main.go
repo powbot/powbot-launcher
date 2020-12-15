@@ -21,7 +21,7 @@ import (
 func CreateDirectory(directory string) (err error) {
 	if _, err := os.Stat(directory); err != nil {
 		if os.IsNotExist(err) {
-			if err := os.MkdirAll(directory, os.ModeDir); err != nil {
+			if err := os.MkdirAll(directory, 0700); err != nil {
 				return err
 			}
 		} else {
@@ -50,7 +50,7 @@ func DownloadToFile(downloadURL string, destFile string) (string, error) {
 }
 
 func Download(downloadURL string, dest string) (string, error) {
-	outputPath := filepath.FromSlash(dest + "/" + path.Base(downloadURL))
+	outputPath := filepath.FromSlash(path.Join(dest, path.Base(downloadURL)))
 	return DownloadToFile(downloadURL, outputPath)
 }
 
@@ -81,7 +81,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	powbotDirectory := filepath.FromSlash(homeDir + "/.powbot/")
+	powbotDirectory := filepath.FromSlash(path.Join(homeDir, "/.powbot/"))
 	if err := CreateDirectory(powbotDirectory); err != nil {
 		tm.Println(tm.Color("\tFailed.", tm.RED))
 		tm.Flush()

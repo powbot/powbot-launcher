@@ -47,7 +47,7 @@ func UnpackJRE(pkg string) error {
 }
 
 func FindJava(powbotDirectory string) (string, error) {
-	jreDirectory := filepath.FromSlash(powbotDirectory + "/jre/")
+	jreDirectory := filepath.FromSlash(path.Join(powbotDirectory, "/jre/"))
 	if _, err := os.Stat(jreDirectory); err != nil {
 		return "", err
 	}
@@ -71,7 +71,7 @@ func FindJava(powbotDirectory string) (string, error) {
 }
 
 func ObtainJRE(powbotDirectory string) (string, error) {
-	jreDirectory := filepath.FromSlash(powbotDirectory + "/jre/")
+	jreDirectory := filepath.FromSlash(path.Join(powbotDirectory, "/jre/"))
 	if err := CreateDirectory(jreDirectory); err != nil {
 		tm.Println(tm.Color("\tCouldn't create directory for JRE at "+jreDirectory, tm.RED))
 		tm.Flush()

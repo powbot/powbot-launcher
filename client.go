@@ -5,6 +5,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"os"
+	"path"
 	"path/filepath"
 	"strings"
 )
@@ -24,12 +25,12 @@ func GetRemoteClientHash() (string, error) {
 }
 
 func ObtainClient(clientDirectory string, hash string) (string, error) {
-	clientPath := filepath.FromSlash(clientDirectory + "/PowBot.jar")
+	clientPath := filepath.FromSlash(path.Join(clientDirectory, "/PowBot.jar"))
 	return DownloadToFile("https://powbot.org/game/"+hash+".jar", clientPath)
 }
 
 func FindClient(clientDirectory string) (string, error) {
-	clientPath := filepath.FromSlash(clientDirectory + "/PowBot.jar")
+	clientPath := filepath.FromSlash(path.Join(clientDirectory, "/PowBot.jar"))
 	if _, err := os.Stat(clientPath); err != nil {
 		return "", err
 	}
@@ -37,7 +38,7 @@ func FindClient(clientDirectory string) (string, error) {
 }
 
 func EnsureClientPresent(powbotDirectory string) (string, error) {
-	clientDirectory := filepath.FromSlash(powbotDirectory + "/client/")
+	clientDirectory := filepath.FromSlash(path.Join(powbotDirectory, "/client/"))
 	if err := CreateDirectory(clientDirectory); err != nil {
 		return "", err
 	}
