@@ -8,6 +8,7 @@ import (
 	tm "github.com/buger/goterm"
 	"github.com/fatih/color"
 	"io"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -15,6 +16,7 @@ import (
 	"path"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -68,6 +70,43 @@ func CalculateSHA1(filePath string) (string, error) {
 	return fmt.Sprintf("%x", hash.Sum(nil)), nil
 }
 
+func RunDebug(powbotDirectory string, java string, jvmArgs string, client string) {
+	cmd := exec.Command(java, jvmArgs, "-jar", client)
+	cmd.Dir = powbotDirectory
+	cmd.Stdin = os.Stdin
+	cmd.Stdout = os.Stdout
+	cmd.Stderr = os.Stderr
+	err := cmd.Run()
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+func RunProd(powbotDirectory string, java string, jvmArgs string, client string) {
+	tm.Println(tm.Color(tm.Bold("Launching the client - this window will close in 5 seconds."), tm.GREEN))
+	tm.Flush()
+
+	if runtime.GOOS == "windows" {
+		cmd := exec.Command("cmd", "/D", powbotDirectory, "/c", "start "+java+" "+string(jvmArgs)+" -jar "+client)
+		cmd.Dir = powbotDirectory
+		err := cmd.Start()
+		if err != nil {
+			log.Fatal(err)
+		}
+		cmd.Process.Release()
+	} else {
+		cmd := exec.Command("/bin/sh", "-c", java+" "+string(jvmArgs)+" -jar "+client)
+		cmd.Dir = powbotDirectory
+		err := cmd.Start()
+		if err != nil {
+			log.Fatal(err)
+		}
+		cmd.Process.Release()
+	}
+
+	time.Sleep(5 * time.Second)
+}
+
 func main() {
 	tm.Output = bufio.NewWriter(color.Output)
 	tm.Clear()
@@ -114,26 +153,16 @@ func main() {
 		tm.Flush()
 	}
 
-	tm.Println(tm.Color(tm.Bold("Launching the client - this window will close in 5 seconds."), tm.GREEN))
-	tm.Flush()
-
-	if runtime.GOOS == "windows" {
-		cmd := exec.Command("cmd", "/D", powbotDirectory, "/c", "start "+java+" -jar "+client)
-		cmd.Dir = powbotDirectory
-		err = cmd.Start()
-		if err != nil {
-			log.Fatal(err)
-		}
-		cmd.Process.Release()
-	} else {
-		cmd := exec.Command("/bin/sh", "-c", java+" -jar "+client)
-		cmd.Dir = powbotDirectory
-		err = cmd.Start()
-		if err != nil {
-			log.Fatal(err)
-		}
-		cmd.Process.Release()
+	jvmArgs, err := ioutil.ReadFile(filepath.FromSlash(powbotDirectory + "/jvmargs.txt"))
+	if err != nil {
+		log.Println(err)
+		jvmArgs = []byte{}
 	}
 
-	time.Sleep(5 * time.Second)
+	if len(os.Args) > 1 && os.Args[1] == "debug" {
+		RunDebug(powbotDirectory, java, strings.Trim(string(jvmArgs), "\r\n"), client)
+	} else {
+		RunProd(powbotDirectory, java, strings.Trim(string(jvmArgs), "\r\n"), client)
+	}
+
 }
