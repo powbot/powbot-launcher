@@ -87,7 +87,7 @@ func RunProd(powbotDirectory string, java string, jvmArgs string, client string)
 	tm.Flush()
 
 	if runtime.GOOS == "windows" {
-		cmd := exec.Command("cmd", "/D", powbotDirectory, "/c", "start "+java+" "+string(jvmArgs)+" -jar "+client)
+		cmd := exec.Command("cmd", "/D", powbotDirectory, "/c", "start "+java+" "+jvmArgs+" -jar "+client)
 		cmd.Dir = powbotDirectory
 		err := cmd.Start()
 		if err != nil {
@@ -95,7 +95,7 @@ func RunProd(powbotDirectory string, java string, jvmArgs string, client string)
 		}
 		cmd.Process.Release()
 	} else {
-		cmd := exec.Command("/bin/sh", "-c", java+" "+string(jvmArgs)+" -jar "+client)
+		cmd := exec.Command("/bin/sh", "-c", java+" "+jvmArgs+" -jar "+client)
 		cmd.Dir = powbotDirectory
 		err := cmd.Start()
 		if err != nil {
@@ -155,7 +155,6 @@ func main() {
 
 	jvmArgs, err := ioutil.ReadFile(filepath.FromSlash(powbotDirectory + "/jvmargs.txt"))
 	if err != nil {
-		log.Println(err)
 		jvmArgs = []byte{}
 	}
 
