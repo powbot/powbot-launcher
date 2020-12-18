@@ -153,9 +153,11 @@ func main() {
 		tm.Flush()
 	}
 
-	jvmArgs, err := ioutil.ReadFile(filepath.FromSlash(powbotDirectory + "/jvmargs.txt"))
+	jvmArgsPath := filepath.FromSlash(powbotDirectory + "/jvmargs.txt")
+	jvmArgs, err := ioutil.ReadFile(jvmArgsPath)
 	if err != nil {
-		jvmArgs = []byte{}
+		ioutil.WriteFile(jvmArgsPath, []byte("-Xmx768M"), 0666)
+		jvmArgs = []byte("-Xmx768M")
 	}
 
 	if len(os.Args) > 1 && os.Args[1] == "debug" {
