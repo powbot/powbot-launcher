@@ -1,5 +1,7 @@
 # powbot-launcher
 
+## Now open-source so you can confirm that it's in fact safe.
+
 A simple Go application that does the following:
 * Check if the powbot directory has a JRE in it 
     * If not, it downloads the appropriate JRE for your platform from AdoptOpenJDK
