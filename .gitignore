@@ -3,3 +3,7 @@
 *.exe
 *.syso
 PowBotLauncher-*
+dist/
+bin/
+obj/Release
+obj/Debug

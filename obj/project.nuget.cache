@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "PoITGF5c8SYJ8ffnSukRgbGtcVGfkP5lMmNOjn3GDEiGOBHCzhZgu5LTAY0nFoz9L/DDy98tpU5rTKWw/rQfqA==",
+  "success": true,
+  "projectFilePath": "/Users/jackh/powbot/powbot-launcher/powbot-launcher.csproj",
+  "expectedPackageFiles": [
+    "/Users/jackh/.nuget/packages/microsoft.netcore.app.runtime.linux-x64/5.0.1/microsoft.netcore.app.runtime.linux-x64.5.0.1.nupkg.sha512",
+    "/Users/jackh/.nuget/packages/microsoft.aspnetcore.app.runtime.linux-x64/5.0.1/microsoft.aspnetcore.app.runtime.linux-x64.5.0.1.nupkg.sha512",
+    "/Users/jackh/.nuget/packages/microsoft.netcore.app.host.linux-x64/5.0.1/microsoft.netcore.app.host.linux-x64.5.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
